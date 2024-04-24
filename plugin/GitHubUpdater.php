@@ -3,10 +3,8 @@
 namespace RYSE\GitHubUpdaterDemo;
 
 /**
- * Updater enables WordPress to check a custom plugin, hosted in a public or
- * private repository on GitHub, for updates, and then either automatically
- * updates it (if enabled), or allows the user to update it from either the
- * Plugins or Updates page.
+ * Enable WordPress to check for and update a custom plugin that's hosted in
+ * either a public or private repository on GitHub.
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
@@ -605,7 +603,7 @@ class GitHubUpdater
      * @param string $branch master
      * @return $this
      */
-    public function setGitHubBranch(string $branch): self
+    public function setBranch(string $branch): self
     {
         $this->gitHubBranch = $branch;
 
@@ -618,7 +616,7 @@ class GitHubUpdater
      * @param string $accessToken github_pat_fU7xGh...
      * @return $this
      */
-    public function setGitHubAccessToken(string $accessToken): self
+    public function setAccessToken(string $accessToken): self
     {
         $this->gitHubAccessToken = $accessToken;
 
