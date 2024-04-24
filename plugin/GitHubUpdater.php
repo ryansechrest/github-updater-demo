@@ -3,13 +3,16 @@
 namespace RYSE\GitHubUpdaterDemo;
 
 /**
- * Keep your custom plugin updated using a public or private GitHub repository.
+ * Updater enables WordPress to check a custom plugin, hosted in a public or
+ * private repository on GitHub, for updates, and then either automatically
+ * updates it (if enabled), or allows the user to update it from either the
+ * Plugins or Updates page.
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
  * @version 1.0.0
  */
-class Updater
+class GitHubUpdater
 {
     /**
      * Absolute path to plugin file containing plugin header
