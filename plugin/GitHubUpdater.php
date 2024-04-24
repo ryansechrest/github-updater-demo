@@ -107,6 +107,15 @@ class GitHubUpdater
      */
     private string $pluginVersion = '';
 
+    /*------------------------------------------------------------------------*/
+
+    /**
+     * Tested WordPress version.
+     *
+     * @var string 6.5.2
+     */
+    private string $testedWpVersion = '';
+
     /**************************************************************************/
 
     /**
@@ -366,6 +375,7 @@ class GitHubUpdater
             'version' => $newVersion,
             'url' => $this->pluginUrl,
             'package' => $this->getRemotePluginZipFile(),
+            'tested' => $this->testedWpVersion,
             'icons' => [
                 '2x' => $this->pluginUrl . '/icon-256x256.png',
                 '1x' => $this->pluginUrl . '/icon-128x128.png',
@@ -622,6 +632,19 @@ class GitHubUpdater
     public function setAccessToken(string $accessToken): self
     {
         $this->gitHubAccessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Set tested WordPress version.
+     *
+     * @param string $version 6.5.2
+     * @return $this
+     */
+    public function setTestedWpVersion(string $version): self
+    {
+        $this->testedWpVersion = $version;
 
         return $this;
     }
