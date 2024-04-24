@@ -3,7 +3,9 @@
 namespace RYSE\GitHubUpdaterDemo;
 
 /**
- * Demonstrate updating private plugins hosted on GitHub.
+ * WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to
+ * check for and update a custom plugin that's hosted in either a public or
+ * private repository on GitHub.
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
@@ -17,8 +19,9 @@ class Plugin
      */
     public function __construct(string $file)
     {
-        (new Updater($file))
-            ->setGitHubAccessToken(GITHUB_ACCESS_TOKEN)
+        (new GitHubUpdater($file))
+            ->setBranch('master')
+            ->setAccessToken(GITHUB_ACCESS_TOKEN)
             ->add();
     }
 }
