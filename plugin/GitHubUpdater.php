@@ -204,6 +204,9 @@ class GitHubUpdater
 
         // e.g. `https://ryansechrest.github.io/github-updater-demo`
         $this->pluginUrl = $pluginUri;
+
+        // e.g. `1.0.0`
+        $this->pluginVersion = $version;
     }
 
     /**
