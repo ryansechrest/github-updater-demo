@@ -12,6 +12,15 @@ namespace RYSE\GitHubUpdaterDemo;
 class Updater
 {
     /**
+     * Absolute path to plugin file containing plugin header
+     *
+     * @var string .../wp-content/plugins/github-updater-demo/github-updater-demo.php
+     */
+    private string $file = '';
+
+    /*------------------------------------------------------------------------*/
+
+    /**
      * GitHub URL
      *
      * @var string https://github.com/ryansechrest/github-updater-demo
@@ -56,13 +65,6 @@ class Updater
     /*------------------------------------------------------------------------*/
 
     /**
-     * Absolute path to plugin file
-     *
-     * @var string .../wp-content/plugins/github-updater-demo/github-updater-demo.php
-     */
-    private string $file = '';
-
-    /**
      * Plugin file
      *
      * @var string github-updater-demo/github-updater-demo.php
@@ -90,7 +92,33 @@ class Updater
      */
     private string $pluginSlug = '';
 
+    /**
+     * Plugin URL
+     *
+     * @var string https://ryansechrest.github.io/github-updater-demo
+     */
+    private string $pluginUrl = '';
+
+    /**
+     * Plugin version
+     *
+     * @var string 1.0.0
+     */
+    private string $pluginVersion = '';
+
     /**************************************************************************/
+
+    /**
+     * Set absolute path to plugin file containing plugin header.
+     *
+     * @param string $file .../wp-content/plugins/github-updater-demo/github-updater-demo.php
+     */
+    public function __construct(string $file)
+    {
+        $this->file = $file;
+
+        $this->load();
+    }
 
     /**
      * Add update mechanism to plugin.
@@ -106,6 +134,97 @@ class Updater
     }
 
     /**************************************************************************/
+
+    /**
+     * Load properties with values based on $file.
+     *
+     *  $gitHubUrl       GitHub URL           https://github.com/ryansechrest/github-updater-demo
+     *  $gitHubPath      GitHub path          ryansechrest/github-updater-demo
+     *  $gitHubOrg       GitHub organization  ryansechrest
+     *  $gitHubRepo      GitHub repository    github-updater-demo
+     *  $pluginFile      Plugin file          github-updater-demo/github-updater-demo.php
+     *  $pluginDir       Plugin directory     github-updater-demo
+     *  $pluginFilename  Plugin filename      github-updater-demo.php
+     *  $pluginSlug      Plugin slug          ryansechrest-github-updater-demo
+     *  $pluginUrl       Plugin URL           https://ryansechrest.github.io/github-updater-demo
+     *  $pluginVersion   Plugin version       1.0.0
+     */
+    private function load(): void
+    {
+        // Fields from plugin header
+        $pluginData = get_file_data(
+            $this->file,
+            [
+                'PluginURI' => 'Plugin URI',
+                'Version' => 'Version',
+                'UpdateURI' => 'Update URI',
+            ]
+        );
+
+        // Extract fields from plugin header
+        $pluginUri = $pluginData['PluginURI'] ?? '';
+        $updateUri = $pluginData['UpdateURI'] ?? '';
+        $version = $pluginData['Version'] ?? '';
+
+        // If required fields were not set, exit
+        if (!$pluginUri || !$updateUri || !$version) {
+            $this->addAdminNotice();
+            return;
+        };
+
+        // e.g. `https://github.com/ryansechrest/github-updater-demo`
+        $this->gitHubUrl = $updateUri;
+
+        // e.g. `ryansechrest/github-updater-demo`
+        $this->gitHubPath = trim(
+            parse_url($updateUri, PHP_URL_PATH),
+            '/'
+        );
+
+        // e.g. `ryansechrest` and `github-updater-demo`
+        list($this->gitHubOrg, $this->gitHubRepo) = explode(
+            '/', $this->gitHubPath
+        );
+
+        // e.g. `github-updater-demo/github-updater-demo.php`
+        $this->pluginFile = str_replace(
+            WP_PLUGIN_DIR . '/', '', $this->file
+        );
+
+        // e.g. `github-updater-demo` and `github-updater-demo.php`
+        list($this->pluginDir, $this->pluginFilename) = explode(
+            '/', $this->pluginFile
+        );
+
+        // e.g. `ryansechrest-github-updater-demo`
+        $this->pluginSlug = sprintf(
+            '%s-%s', $this->gitHubOrg, $this->gitHubRepo
+        );
+
+        // e.g. `https://ryansechrest.github.io/github-updater-demo`
+        $this->pluginUrl = $pluginUri;
+    }
+
+    /**
+     * Add admin notice that required plugin header fields are missing.
+     *
+     * @return void
+     */
+    private function addAdminNotice(): void
+    {
+        add_action('admin_notices', function () {
+            $pluginFile = str_replace(
+                WP_PLUGIN_DIR . '/', '', $this->file
+            );
+            echo '<div class="notice notice-error">';
+            echo '<p>';
+            echo sprintf('Plugin <b>%s</b> is missing one or more required header fields: <b>Plugin URI</b>, <b>Version</b>, and/or <b>Update URI</b>.', $pluginFile);
+            echo '</p>';
+            echo '</div>';
+        });
+    }
+
+    /*------------------------------------------------------------------------*/
 
     /**
      * Update plugin details URL.
@@ -162,15 +281,9 @@ class Updater
         // If URL doesn't reference target plugin, exit
         if (!str_contains($path, $query)) return $url;
 
-        $data = get_plugin_data($this->file);
-        $pluginUri = $data['PluginURI'] ?? '';
-
-        // If plugin URI is not set, exit
-        if (!$pluginUri) return $url;
-
         return sprintf(
             '%s?TB_iframe=true&width=600&height=550',
-            $pluginUri
+            $this->pluginUrl
         );
     }
 
@@ -215,9 +328,6 @@ class Updater
         // Get update URI, e.g. `https://github.com/ryansechrest/github-updater-demo`
         $updateUri = $data['UpdateURI'] ?? '';
 
-        // If plugin doesn't define an update URI, exit
-        if (!$updateUri) return false;
-
         // Extract GitHub path from update URI,
         // e.g. `ryansechrest/github-updater-demo`
         $gitHubPath = trim(
@@ -247,23 +357,16 @@ class Updater
         if (!$newVersion) return false;
 
         // Build plugin response for WordPress
-        $response = [
+        return [
             'slug' => $this->pluginSlug,
             'version' => $newVersion,
-            'url' => $data['PluginURI'] ?? '',
+            'url' => $this->pluginUrl,
             'package' => $this->getRemotePluginZipFile(),
+            'icons' => [
+                '2x' => $this->pluginUrl . '/icon-256x256.png',
+                '1x' => $this->pluginUrl . '/icon-128x128.png',
+            ]
         ];
-
-        // Get plugin URI, e.g. `https://ryansechrest.github.io/github-updater-demo`
-        $pluginUri = $data['PluginURI'] ?? '';
-
-        // If plugin URI is set, add plugin icons
-        if ($pluginUri) {
-            $response['icons']['2x'] = $pluginUri . '/icon-256x256.png';
-            $response['icons']['1x'] = $pluginUri . '/icon-128x128.png';
-        }
-
-        return $response;
     }
 
     /**
@@ -415,6 +518,9 @@ class Updater
     /**
      * Hook to prepare HTTP request args.
      *
+     *  $args  An array of HTTP request arguments.
+     *  $url   The request URL.
+     *
      * @param array $args ['method' => 'GET', 'headers' => [], ...]
      * @param string $url https://api.github.com/repos/ryansechrest/github-updater-demo/zipball/master
      * @return array ['headers' => ['Authorization => 'Bearer...'], ...]
@@ -489,87 +595,6 @@ class Updater
     }
 
     /**************************************************************************/
-
-    /**
-     * Set absolute plugin file and derive:
-     *
-     *  $pluginFile      Plugin file       github-updater-demo/github-updater-demo.php
-     *  $pluginDir       Plugin directory  github-updater-demo
-     *  $pluginFilename  Plugin filename   github-updater-demo.php
-     *
-     * @param string $file .../wp-content/plugins/github-updater-demo/github-updater-demo.php
-     * @return $this
-     */
-    public function setFile(string $file): self
-    {
-        $this->file = $file;
-
-        // e.g. `github-updater-demo/github-updater-demo.php`
-        $this->setPluginFile(str_replace(
-            WP_PLUGIN_DIR . '/', '', $this->file
-        ));
-
-        return $this;
-    }
-
-    /**
-     * Set plugin file and derive:
-     *
-     *  $file            Absolute file     .../wp-content/plugins/github-updater-demo/github-updater-demo.php
-     *  $pluginDir       Plugin directory  github-updater-demo
-     *  $pluginFilename  Plugin filename   github-updater-demo.php
-     *
-     * @param string $file github-updater-demo/github-updater-demo.php
-     * @return $this
-     */
-    public function setPluginFile(string $file): self
-    {
-        $this->pluginFile = $file;
-
-        // e.g. `.../wp-content/plugins/github-updater-demo/github-updater-demo.php`
-        if (!$this->file) $this->file = WP_PLUGIN_DIR . '/' . $file;
-
-        // e.g. `github-updater-demo` and `github-updater-demo.php`
-        list($this->pluginDir, $this->pluginFilename) = explode(
-            '/', $this->pluginFile
-        );
-
-        return $this;
-    }
-
-    /**
-     * Set GitHub path and derive:
-     *
-     *  $gitHubUrl   GitHub URL           https://github.com/ryansechrest/github-updater-demo
-     *  $gitHubOrg   GitHub organization  ryansechrest
-     *  $gitHubRepo  GitHub repository    github-updater-demo
-     *  $pluginSlug  Plugin slug          ryansechrest-github-updater-demo
-     *
-     * @param string $path ryansechrest/github-updater-demo
-     * @return $this
-     */
-    public function setGitHubPath(string $path): self
-    {
-        $this->gitHubPath = $path;
-
-        // e.g. `https://github.com/ryansechrest/github-updater-demo`
-        $this->gitHubUrl = sprintf(
-            'https://github.com/%s',
-            $this->gitHubPath
-        );
-
-        // e.g. `ryansechrest` and `github-updater-demo`
-        list($this->gitHubOrg, $this->gitHubRepo) = explode(
-            '/', $this->gitHubPath
-        );
-
-        // e.g. `ryansechrest-github-updater-demo`
-        $this->pluginSlug = sprintf(
-            '%s-%s', $this->gitHubOrg, $this->gitHubRepo
-        );
-
-        return $this;
-    }
 
     /**
      * Set GitHub branch of plugin.
