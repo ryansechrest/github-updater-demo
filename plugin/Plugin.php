@@ -17,9 +17,7 @@ class Plugin
      */
     public function __construct(string $file)
     {
-        (new Updater)
-            ->setFile($file)
-            ->setGitHubPath('ryansechrest/github-updater-demo')
+        (new Updater($file))
             ->setGitHubAccessToken(GITHUB_ACCESS_TOKEN)
             ->add();
     }
