@@ -22,6 +22,7 @@ class Plugin
         (new GitHubUpdater($file))
             ->setBranch('master')
             ->setAccessToken(GITHUB_ACCESS_TOKEN)
+            ->setTestedWpVersion('6.5.2')
             ->add();
     }
 }
