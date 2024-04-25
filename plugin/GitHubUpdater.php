@@ -178,7 +178,7 @@ class GitHubUpdater
 
         // If required fields were not set, exit
         if (!$pluginUri || !$updateUri || !$version) {
-            $this->addAdminNotice();
+            $this->addAdminNotice('Plugin <b>%s</b> is missing one or more required header fields: <b>Plugin URI</b>, <b>Version</b>, and/or <b>Update URI</b>.');
             return;
         };
 
@@ -221,18 +221,17 @@ class GitHubUpdater
     /**
      * Add admin notice that required plugin header fields are missing.
      *
+     * @param string $message Plugin <b>%s</b> is missing one or more required header fields: <b>Plugin URI</b>, <b>Version</b>, and/or <b>Update URI</b>.
      * @return void
      */
-    private function addAdminNotice(): void
+    private function addAdminNotice(string $message): void
     {
-        add_action('admin_notices', function () {
+        add_action('admin_notices', function () use ($message) {
             $pluginFile = str_replace(
                 WP_PLUGIN_DIR . '/', '', $this->file
             );
             echo '<div class="notice notice-error">';
-            echo '<p>';
-            echo sprintf('Plugin <b>%s</b> is missing one or more required header fields: <b>Plugin URI</b>, <b>Version</b>, and/or <b>Update URI</b>.', $pluginFile);
-            echo '</p>';
+            echo '<p>' . sprintf($message, $pluginFile) . '</p>';
             echo '</div>';
         });
     }
@@ -424,9 +423,9 @@ class GitHubUpdater
         // Generate URL to public remote plugin file.
         return sprintf(
             'https://raw.githubusercontent.com/%s/%s/%s',
-            $this->gitHubPath,    // ryansechrest/github-updater-demo
-            $this->gitHubBranch,  // master
-            $filename             // github-updater-demo.php
+            $this->gitHubPath,
+            $this->gitHubBranch,
+            $filename
         );
     }
 
@@ -465,9 +464,9 @@ class GitHubUpdater
         // Generate URL to private remote plugin file.
         return sprintf(
             'https://api.github.com/repos/%s/contents/%s?ref=%s',
-            $this->gitHubPath,   // ryansechrest/github-updater-demo
-            $filename,           // github-updater-demo.php
-            $this->gitHubBranch  // master
+            $this->gitHubPath,
+            $filename,
+            $this->gitHubBranch
         );
     }
 
