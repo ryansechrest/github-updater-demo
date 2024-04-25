@@ -33,6 +33,7 @@ spl_autoload_register(function ($class) {
     // If file does not exist, exit
     if (!file_exists($class)) return;
 
-    // Require class: .../wp-content/plugins/<pluginName>/plugin/Foo/Bar.php
+    // Require class:
+    // .../wp-content/plugins/<pluginName>/plugin/Foo/Bar.php
     require_once $class;
 });
