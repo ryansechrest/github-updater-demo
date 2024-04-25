@@ -371,15 +371,17 @@ class GitHubUpdater
 
         // Build plugin response for WordPress
         return [
+            'id' => $this->gitHubUrl,
             'slug' => $this->pluginSlug,
+            'plugin' => $this->pluginFile,
             'version' => $newVersion,
             'url' => $this->pluginUrl,
             'package' => $this->getRemotePluginZipFile(),
-            'tested' => $this->testedWpVersion,
             'icons' => [
                 '2x' => $this->pluginUrl . '/icon-256x256.png',
                 '1x' => $this->pluginUrl . '/icon-128x128.png',
-            ]
+            ],
+            'tested' => $this->testedWpVersion,
         ];
     }
 
