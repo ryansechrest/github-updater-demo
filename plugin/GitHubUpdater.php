@@ -148,16 +148,16 @@ class GitHubUpdater
     /**
      * Load properties with values based on $file.
      *
-     *  $gitHubUrl       GitHub URL           https://github.com/ryansechrest/github-updater-demo
-     *  $gitHubPath      GitHub path          ryansechrest/github-updater-demo
-     *  $gitHubOrg       GitHub organization  ryansechrest
-     *  $gitHubRepo      GitHub repository    github-updater-demo
-     *  $pluginFile      Plugin file          github-updater-demo/github-updater-demo.php
-     *  $pluginDir       Plugin directory     github-updater-demo
-     *  $pluginFilename  Plugin filename      github-updater-demo.php
-     *  $pluginSlug      Plugin slug          ryansechrest-github-updater-demo
-     *  $pluginUrl       Plugin URL           https://ryansechrest.github.io/github-updater-demo
-     *  $pluginVersion   Plugin version       1.0.0
+     *   $gitHubUrl       GitHub URL           https://github.com/ryansechrest/github-updater-demo
+     *   $gitHubPath      GitHub path          ryansechrest/github-updater-demo
+     *   $gitHubOrg       GitHub organization  ryansechrest
+     *   $gitHubRepo      GitHub repository    github-updater-demo
+     *   $pluginFile      Plugin file          github-updater-demo/github-updater-demo.php
+     *   $pluginDir       Plugin directory     github-updater-demo
+     *   $pluginFilename  Plugin filename      github-updater-demo.php
+     *   $pluginSlug      Plugin slug          ryansechrest-github-updater-demo
+     *   $pluginUrl       Plugin URL           https://ryansechrest.github.io/github-updater-demo
+     *   $pluginVersion   Plugin version       1.0.0
      */
     private function load(): void
     {
@@ -248,15 +248,17 @@ class GitHubUpdater
      *
      * If we don't set `slug` in the plugin response within
      * `_checkPluginUpdates()`, a PHP warning appears on Dashboard > Updates,
-     * triggered in `wp-admin/update-core.php on line 570` that the `slug` is
+     * triggered in `wp-admin/update-core.php on line 570`, that the `slug` is
      * missing.
      *
-     * Since we have to set the `slug`, WordPress thinks the plugin is hosted
-     * on wordpress.org, and attempts to show plugin details from wordpress.org
-     * in a modal, however this shows an error: `Plugin not found.`
+     * Since we're forced to set the `slug`, WordPress thinks the plugin is
+     * hosted on wordpress.org, and attempts to show plugin details from
+     * wordpress.org in its modal, however this results in an error:
+     * `Plugin not found.`
      *
-     * We use this filter to replace the WordPress modal URL to the `Update URI`
-     * plugin header, which fixes the URL in the following places:
+     * We use this filter to replace the WordPress modal URL with the value
+     * of the `Update URI` plugin header, which fixes the URL in the following
+     * places:
      *
      * Dashboard > Updates
      *
@@ -311,8 +313,8 @@ class GitHubUpdater
      *
      * If plugin has an `Update URI` pointing to `github.com`, then check if
      * plugin was updated on GitHub, and if so, record a pending update so that
-     * either WordPress can automatically update it (if enabled) or a user can
-     * manually update it just like officially hosted plugins.
+     * either WordPress can automatically update it (if enabled), or a user can
+     * manually update it much like an officially-hosted plugin.
      *
      * @return void
      */
@@ -538,8 +540,8 @@ class GitHubUpdater
     /**
      * Hook to prepare HTTP request args.
      *
-     *  $args  An array of HTTP request arguments.
-     *  $url   The request URL.
+     *   $args  An array of HTTP request arguments.
+     *   $url   The request URL.
      *
      * @param array $args ['method' => 'GET', 'headers' => [], ...]
      * @param string $url https://api.github.com/repos/ryansechrest/github-updater-demo/zipball/master
