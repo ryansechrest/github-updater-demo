@@ -89,4 +89,4 @@ $gitHubUpdater->add();
 
 If you don't call `add()`, nothing will happen. This should be the very last method call after everything has been configured.
 
-Last, if you want an even deeper dive into how it works, check out this blog post here: 
+Last, if you want an even deeper dive into how it works, check out this blog post here: https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-using-github/
