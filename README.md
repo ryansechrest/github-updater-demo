@@ -41,15 +41,15 @@ $gitHubUpdater->setBranch('main');
 
 ### Configure: Personal Access Token (Optional)
 
-If your GitHub repository is public, you don't need to set an access token, but if your repository is private, specify it:
+If your GitHub repository is public, you don't need to set an access token, but if your repository is private, you can pass it in here:
 
 ```php
 $gitHubUpdater->setAccessToken('github_pat_XXXXXXXXX');
 ```
 
-Note that it's not recommended that you hardcode the token like this. Either set a constant in `wp-config.php` and pass in the constant, or save the token in `wp_options` (manually or via a field on an options page) and then pass it via `get_option()`.
+Note that it's not recommended that you hardcode the token like this.
 
-For example:
+Either set a constant in `wp-config.php` and pass in the constant:
 
 ```php
 # wp-config.php
@@ -60,7 +60,7 @@ define( 'GITHUB_ACCESS_TOKEN', 'github_pat_XXXXXXXXXX' );
 $gitHubUpdater->setAccessToken(GITHUB_ACCESS_TOKEN);
 ```
 
-Or:
+Or save the token in `wp_options` (manually or via a settings field on an options page) and then pass it via `get_option()`:
 
 ```php
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
