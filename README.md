@@ -56,7 +56,7 @@ For example:
 ```php
 # wp-config.php
 
-define( 'GITHUB_ACCESS_TOKEN', 'github_pat_XXXXXXXXXX');
+define( 'GITHUB_ACCESS_TOKEN', 'github_pat_XXXXXXXXXX' );
 ```
 
 ```php
