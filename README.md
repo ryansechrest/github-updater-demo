@@ -7,11 +7,11 @@ WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to chec
 1. Copy `GitHubUpdater.php` into your plugin
 2. Update namespace (if needed) to match your plugin
 3. Require `GitHubUpdater.php` if not auto-loaded
-4. Instantiate and configure `GitHubUpdater`
+4. Add `GitHubUpdater` to your plugin
 
-## Enable GitHubUpdater
+## Add GitHubUpdater
 
-How to enable the GitHubUpdater for your plugin.
+How to add GitHubUpdater to your plugin.
 
 ### Instantiate (Required)
 
