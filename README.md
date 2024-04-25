@@ -36,7 +36,6 @@ The path above is just an example. It's not a good idea to hardcode any part of 
 If your production branch is called `master`, you don't need to set the branch, but if your production branch has a different name, specify it:
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->setBranch('main');
 ```
 
@@ -45,7 +44,6 @@ $gitHubUpdater->setBranch('main');
 If your GitHub repository is public, you don't need to set an access token, but if your repository is private, specify it:
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->setAccessToken('github_pat_XXXXXXXXX');
 ```
 
@@ -55,19 +53,16 @@ For example:
 
 ```php
 # wp-config.php
-
 define( 'GITHUB_ACCESS_TOKEN', 'github_pat_XXXXXXXXXX' );
 ```
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->setAccessToken(GITHUB_ACCESS_TOKEN);
 ```
 
 Or:
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 ```
 
@@ -76,14 +71,12 @@ $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 If you want WordPress to show your plugin is compatible with the latest version on Dashboard > Updates, then provided the highest version of WordPress you've tested your plugin on:
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->setTestedWpVersion('6.5.2');
 ```
 
 ### Add GitHubUpdater to WordPress (Required)
 
 ```php
-$gitHubUpdater = new GitHubUpdater(__FILE__);
 $gitHubUpdater->add();
 ```
 
