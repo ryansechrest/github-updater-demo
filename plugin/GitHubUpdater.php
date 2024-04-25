@@ -187,7 +187,7 @@ class GitHubUpdater
 
         // e.g. `ryansechrest/github-updater-demo`
         $this->gitHubPath = trim(
-            parse_url($updateUri, PHP_URL_PATH),
+            wp_parse_url($updateUri, PHP_URL_PATH),
             '/'
         );
 
@@ -231,7 +231,12 @@ class GitHubUpdater
                 WP_PLUGIN_DIR . '/', '', $this->file
             );
             echo '<div class="notice notice-error">';
-            echo '<p>' . sprintf($message, $pluginFile) . '</p>';
+            echo '<p>';
+            echo wp_kses(
+                sprintf($message, $pluginFile),
+                ['b' => []]
+            );
+            echo '</p>';
             echo '</div>';
         });
     }
@@ -343,7 +348,7 @@ class GitHubUpdater
         // Extract GitHub path from update URI,
         // e.g. `ryansechrest/github-updater-demo`
         $gitHubPath = trim(
-            parse_url($updateUri, PHP_URL_PATH),
+            wp_parse_url($updateUri, PHP_URL_PATH),
             '/'
         );
 
