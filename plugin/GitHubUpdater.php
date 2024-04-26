@@ -52,9 +52,9 @@ class GitHubUpdater
     /**
      * GitHub branch
      *
-     * @var string master
+     * @var string main
      */
-    private string $gitHubBranch = 'master';
+    private string $gitHubBranch = 'main';
 
     /**
      * GitHub access token
@@ -621,7 +621,7 @@ class GitHubUpdater
     /**
      * Set GitHub branch of plugin.
      *
-     * @param string $branch master
+     * @param string $branch main
      * @return $this
      */
     public function setBranch(string $branch): self
