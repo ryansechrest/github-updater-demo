@@ -20,6 +20,7 @@ class Plugin
     public function __construct(string $file)
     {
         (new GitHubUpdater($file))
+            ->setBranch('master')
             ->setTestedWpVersion('6.5.2')
             ->add();
     }
