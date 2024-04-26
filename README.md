@@ -33,10 +33,10 @@ The path above is just an example. It's not a good idea to hardcode any part of 
 
 ### Configure: Production Branch (Optional)
 
-If your production branch is called `master`, you don't need to set the branch, but if your production branch has a different name, specify it:
+If your production branch is called `main`, you don't need to set the branch, but if your production branch has a different name, specify it:
 
 ```php
-$gitHubUpdater->setBranch('main');
+$gitHubUpdater->setBranch('master');
 ```
 
 ### Configure: Personal Access Token (Optional)
