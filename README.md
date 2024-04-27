@@ -83,4 +83,4 @@ $gitHubUpdater->add();
 
 This should be the last method call after `GitHubUpdater` has been configured.
 
-If you want a deep dive into how `GitHubUpdater` works, check out this [https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/](blog post).
+If you want a deep dive into how `GitHubUpdater` works, check out this [blog post](https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/).
