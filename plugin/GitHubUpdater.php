@@ -8,7 +8,7 @@ namespace RYSE\GitHubUpdaterDemo;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.0.2
+ * @version 1.0.3
  */
 class GitHubUpdater
 {
@@ -427,20 +427,14 @@ class GitHubUpdater
         array|false $update, array $data, string $file
     ): array|false
     {
-        // Get update URI, e.g. `https://github.com/ryansechrest/github-updater-demo`
-        $updateUri = $data['UpdateURI'] ?? '';
+        // Get plugins managed by GitHubUpdater
+        $plugins = get_option(self::OPTION_NAME);
 
-        // Extract GitHub path from update URI,
-        // e.g. `ryansechrest/github-updater-demo`
-        $gitHubPath = trim(
-            wp_parse_url($updateUri, PHP_URL_PATH),
-            '/'
-        );
+        // If none exist, exit
+        if (!is_array($plugins)) return false;
 
-        // If plugin doesn't match configured GitHub path, exit
-        // This prevents updating plugins hosted on GitHub that were not
-        // explicitly configured to be updated by this Updater
-        if ($gitHubPath !== $this->gitHubPath) return false;
+        // If current is not managed by GitHubUpdater, exit
+        if (!in_array($this->gitHubPath, $plugins)) return false;
 
         // Get remote plugin file contents to read plugin header
         $fileContents = $this->getRemotePluginFileContents();
