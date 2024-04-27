@@ -5,35 +5,31 @@ WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to chec
 ## Getting Started
 
 1. Copy `GitHubUpdater.php` into your plugin
-2. Update namespace (if needed) to match your plugin
-3. Require `GitHubUpdater.php` if not auto-loaded
-4. Add `GitHubUpdater` to your plugin
+2. Update namespace to match your plugin
+3. Require `GitHubUpdater.php` in your plugin
+4. Instantiate `GitHubUpdater` in your plugin
 
-## Add GitHubUpdater
+## Setup
 
-How to add GitHubUpdater to your plugin.
+How to add and configure `GitHubUpdater` for your plugin.
 
-### Instantiate (Required)
+### Instantiate GitHubUpdater (Required)
+
+Instantiate `GitHubUpdater` and pass in the absolute path to your root plugin file.
 
 ```php
 $gitHubUpdater = new GitHubUpdater(__FILE__);
 ```
 
-If you don't do this in your root plugin file, the one which contains your plugin header, then make sure that you pass the absolute file path of your root plugin file.
+For example, `__FILE__` might resolve to:
 
-For example:
-
-```php
-$file = '/var/www/domains/example.org/wp-content/plugins/<pluginDir>/<pluginFilename>.php';
-
-$gitHubUpdater = new GitHubUpdater($file);
 ```
-
-The path above is just an example. It's not a good idea to hardcode any part of that path, because directories can change.
+/var/www/domains/example.org/wp-content/plugins/<pluginDir>/<pluginSlug>.php
+```
 
 ### Configure: Production Branch (Optional)
 
-If your production branch is called `main`, you don't need to set the branch, but if your production branch has a different name, specify it:
+If your production branch is not the default `main`, then specify it:
 
 ```php
 $gitHubUpdater->setBranch('master');
@@ -41,26 +37,27 @@ $gitHubUpdater->setBranch('master');
 
 ### Configure: Personal Access Token (Optional)
 
-If your GitHub repository is public, you don't need to set an access token, but if your repository is private, you can pass it in here:
+If your GitHub repository is private, then set your access token:
 
 ```php
 $gitHubUpdater->setAccessToken('github_pat_XXXXXXXXX');
 ```
 
-Note that it's not recommended that you hardcode the token like this.
+It's not recommended to hardcode a token like you see above.
 
-Either set a constant in `wp-config.php` and pass in the constant:
+Either define a constant in `wp-config.php`:
 
 ```php
-# wp-config.php
 define( 'GITHUB_ACCESS_TOKEN', 'github_pat_XXXXXXXXXX' );
 ```
+
+And then pass in the constant:
 
 ```php
 $gitHubUpdater->setAccessToken(GITHUB_ACCESS_TOKEN);
 ```
 
-Or save the token in `wp_options` (manually or via a settings field on an options page) and then pass it via `get_option()`:
+Or save your access token in `wp_options` and pass it via `get_option()`:
 
 ```php
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
@@ -68,18 +65,22 @@ $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 
 ### Configure: Tested WordPress Version (Optional)
 
-If you want WordPress to show your plugin is compatible with the latest version on Dashboard > Updates, then provided the highest version of WordPress you've tested your plugin on:
+Specify the highest version of WordPress you've tested your plugin on:
 
 ```php
 $gitHubUpdater->setTestedWpVersion('6.5.2');
 ```
 
-### Add GitHubUpdater to WordPress (Required)
+This only impacts the compatibility message on Dashboard > Updates.
+
+### Add GitHubUpdater (Required)
+
+Add all necessary hooks to WordPress to keep your plugin updated moving forward:
 
 ```php
 $gitHubUpdater->add();
 ```
 
-If you don't call `add()`, nothing will happen. This should be the very last method call after everything has been configured.
+This should be the last method call after `GitHubUpdater` has been configured.
 
-Last, if you want an even deeper dive into how it works, check out this blog post here: https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/
+If you want a deep dive into how `GitHubUpdater` works, check out this [https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/](blog post).
