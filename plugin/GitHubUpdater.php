@@ -8,10 +8,34 @@ namespace RYSE\GitHubUpdaterDemo;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.0.1
+ * @version 1.0.2
  */
 class GitHubUpdater
 {
+    /**
+     * Option name to remember plugin.
+     *
+     * This value SHOULD NOT be changed.
+     *
+     * There is a filter further down (`update_plugins_github.com`) that targets
+     * any plugin where github.com is the hostname in the Update URI.
+     *
+     * It's entirely possible that another plugin, not managed by GitHubUpdater,
+     * uses a GitHub hostname there. Well, we don't want to touch those plugins,
+     * so we need a way to make sure we only target plugins managed by
+     * GitHubUpdater.
+     *
+     * This is where the option comes in. Any time a plugin with GitHubUpdater
+     * is activated, we record it in this option, and when it's deactivated,
+     * we remove from that option.
+     *
+     * Then, when the filter runs, we can read this option, see if that plugin
+     * is one of ours, and proceed, but if not, we leave that plugin alone.
+     */
+    const OPTION_NAME = 'ryse_github_updater';
+
+    /*------------------------------------------------------------------------*/
+
     /**
      * Absolute path to plugin file containing plugin header
      *
@@ -137,6 +161,7 @@ class GitHubUpdater
      */
     public function add(): void
     {
+        $this->updatePluginStatus();
         $this->updatePluginDetailsUrl();
         $this->checkPluginUpdates();
         $this->prepareHttpRequestArgs();
@@ -244,6 +269,64 @@ class GitHubUpdater
     /*------------------------------------------------------------------------*/
 
     /**
+     * Add or remove plugin from option.
+     *
+     * @return void
+     */
+    private function updatePluginStatus(): void
+    {
+        // When plugin is activated, add plugin to option
+        register_activation_hook($this->file, function () {
+
+            // Get plugins managed by GitHubUpdater
+            $plugins = get_option(self::OPTION_NAME);
+
+            // If none exist, create an array
+            if (!is_array($plugins)) $plugins = [];
+
+            // Push this plugin to array
+            $plugins[] = $this->gitHubPath;
+
+            // Save plugin in option
+            update_option(self::OPTION_NAME, $plugins);
+        });
+
+        // When plugin is deactivated, remove plugin from option
+        register_deactivation_hook($this->file, function () {
+
+            // Get plugins managed by GitHubUpdater
+            $plugins = get_option(self::OPTION_NAME);
+
+            // If none exist (strange), leave it alone
+            if (!is_array($plugins)) return;
+
+            // Otherwise find this plugin
+            $pos = array_search($this->gitHubPath, $plugins);
+
+            // If plugin doesn't exist (strange), leave it alone
+            if ($pos === false) return;
+
+            // Otherwise remove plugin
+            unset($plugins[$pos]);
+
+            // If plugin was last plugin managed by GitHubUpdater,
+            // delete option from database
+            if (count($plugins) === 0) {
+                delete_option(self::OPTION_NAME);
+                return;
+            }
+
+            // Otherwise reindex array
+            $plugins = array_values($plugins);
+
+            // Save remaining plugins managed by GitHubUpdater
+            update_option(self::OPTION_NAME, $plugins);
+        });
+    }
+
+    /*------------------------------------------------------------------------*/
+
+    /**
      * Update plugin details URL.
      *
      * If we don't set `slug` in the plugin response within
@@ -277,7 +360,7 @@ class GitHubUpdater
             'admin_url',
             [$this, '_updatePluginDetailsUrl'],
             10,
-            4
+            2
         );
     }
 
