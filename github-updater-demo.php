@@ -2,7 +2,7 @@
 
 namespace RYSE\GitHubUpdaterDemo;
 
-/*
+/**
  * Plugin Name:        GitHub Updater Demo
  * Plugin URI:         https://ryansechrest.github.io/github-updater-demo
  * Version:            1.0.3
@@ -13,6 +13,8 @@ namespace RYSE\GitHubUpdaterDemo;
  * Requires at least:  6.5
  * Requires PHP:       8.2
  * Update URI:         https://github.com/ryansechrest/github-updater-demo
+ * License:            GPLv2
+ * License URI:        https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) exit;
