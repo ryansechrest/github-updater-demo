@@ -433,7 +433,7 @@ class GitHubUpdater
         // If none exist, exit
         if (!is_array($plugins)) return false;
 
-        // If current is not managed by GitHubUpdater, exit
+        // If current plugin is not managed by GitHubUpdater, exit
         if (!in_array($this->gitHubPath, $plugins)) return false;
 
         // Get remote plugin file contents to read plugin header
