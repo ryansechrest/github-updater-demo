@@ -427,14 +427,17 @@ class GitHubUpdater
         array|false $update, array $data, string $file
     ): array|false
     {
+        // If plugin does not match this plugin, exit
+        if ($file !== $this->pluginFile) return $update;
+
         // Get plugins managed by GitHubUpdater
         $plugins = get_option(self::OPTION_NAME);
 
         // If none exist, exit
-        if (!is_array($plugins)) return false;
+        if (!is_array($plugins)) return $update;
 
         // If current plugin is not managed by GitHubUpdater, exit
-        if (!in_array($this->gitHubPath, $plugins)) return false;
+        if (!in_array($this->gitHubPath, $plugins)) return $update;
 
         // Get remote plugin file contents to read plugin header
         $fileContents = $this->getRemotePluginFileContents();
@@ -450,7 +453,7 @@ class GitHubUpdater
         $newVersion = $matches[1][0] ?? '';
 
         // If version wasn't found, exit
-        if (!$newVersion) return false;
+        if (!$newVersion) return $update;
 
         // Build plugin response for WordPress
         return [
@@ -653,7 +656,9 @@ class GitHubUpdater
     {
         add_filter(
             'upgrader_install_package_result',
-            [$this, '_moveUpdatedPlugin']
+            [$this, '_moveUpdatedPlugin'],
+            10,
+            2
         );
     }
 
@@ -661,10 +666,18 @@ class GitHubUpdater
      * Hook to move updated plugin.
      *
      * @param array $result ['destination' => '.../wp-content/plugins/github-updater-demo-master', ...]
+     * @param array $options ['plugin' => 'github-updater-demo/github-updater-demo.php', ...]
      * @return array
      */
-    public function _moveUpdatedPlugin(array $result): array
+    public function _moveUpdatedPlugin(array $result, array $options): array
     {
+        // Get plugin being updated
+        // e.g. `github-updater-demo/github-updater-demo.php`
+        $pluginFile = $options['plugin'] ?? '';
+
+        // If plugin does not match this plugin, exit
+        if ($pluginFile !== $this->pluginFile) return $result;
+
         // Save path to new plugin
         // e.g. `.../wp-content/plugins/github-updater-demo-master`
         $newPluginPath = $result['destination'] ?? '';
