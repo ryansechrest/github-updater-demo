@@ -63,16 +63,6 @@ Or save your access token in `wp_options` and pass it via `get_option()`:
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 ```
 
-### Configure: Tested WordPress Version (Optional)
-
-Specify the highest version of WordPress you've tested your plugin on:
-
-```php
-$gitHubUpdater->setTestedWpVersion('6.5.2');
-```
-
-This only impacts the compatibility message on Dashboard > Updates.
-
 ### Add GitHubUpdater (Required)
 
 Add all necessary hooks to WordPress to keep your plugin updated moving forward:
@@ -82,5 +72,23 @@ $gitHubUpdater->add();
 ```
 
 This should be the last method call after `GitHubUpdater` has been configured.
+
+### Indicate WordPress Compatibility
+
+Add highest version of WordPress that your plugin was tested on using a custom `Tested up to` plugin header field.
+
+For example, specifying a header field like:
+
+```
+Tested up to: 6.6
+```
+
+Will show the following compatibility message on Dashboard > Updates when your plugin has an update:
+
+```
+Compatibility with WordPress 6.6: 100% (according to its author)
+```
+
+## Final Thoughts
 
 If you want a deep dive into how `GitHubUpdater` works, check out this [blog post](https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/).
