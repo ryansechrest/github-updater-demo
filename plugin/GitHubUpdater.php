@@ -8,7 +8,7 @@ namespace RYSE\GitHubUpdaterDemo;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.0.5
+ * @version 1.0.6
  */
 class GitHubUpdater
 {
@@ -110,11 +110,11 @@ class GitHubUpdater
     /*------------------------------------------------------------------------*/
 
     /**
-     * Tested WordPress version.
+     * Tested up to specified WordPress version.
      *
-     * @var string 6.5.2
+     * @var string 6.6
      */
-    private string $testedWpVersion = '';
+    private string $testedUpTo = '';
 
     /**************************************************************************/
 
@@ -158,6 +158,7 @@ class GitHubUpdater
      *   $pluginSlug      Plugin slug          ryansechrest-github-updater-demo
      *   $pluginUrl       Plugin URL           https://ryansechrest.github.io/github-updater-demo
      *   $pluginVersion   Plugin version       1.0.0
+     *   $testedUpTo      Tested up to         6.6
      */
     private function load(): void
     {
@@ -167,6 +168,7 @@ class GitHubUpdater
             [
                 'PluginURI' => 'Plugin URI',
                 'Version' => 'Version',
+                'TestedUpTo' => 'Tested up to',
                 'UpdateURI' => 'Update URI',
             ]
         );
@@ -175,12 +177,13 @@ class GitHubUpdater
         $pluginUri = $pluginData['PluginURI'] ?? '';
         $updateUri = $pluginData['UpdateURI'] ?? '';
         $version = $pluginData['Version'] ?? '';
+        $testedUpTo = $pluginData['TestedUpTo'] ?? '';
 
         // If required fields were not set, exit
         if (!$pluginUri || !$updateUri || !$version) {
             $this->addAdminNotice('Plugin <b>%s</b> is missing one or more required header fields: <b>Plugin URI</b>, <b>Version</b>, and/or <b>Update URI</b>.');
             return;
-        };
+        }
 
         // e.g. `https://github.com/ryansechrest/github-updater-demo`
         $this->gitHubUrl = $updateUri;
@@ -216,6 +219,9 @@ class GitHubUpdater
 
         // e.g. `1.0.0`
         $this->pluginVersion = $version;
+
+        // e.g. `6.6`
+        $this->testedUpTo = $testedUpTo;
     }
 
     /**
@@ -375,7 +381,7 @@ class GitHubUpdater
                 '2x' => $this->pluginUrl . '/icon-256x256.png',
                 '1x' => $this->pluginUrl . '/icon-128x128.png',
             ],
-            'tested' => $this->testedWpVersion,
+            'tested' => $this->testedUpTo,
         ];
     }
 
@@ -638,19 +644,6 @@ class GitHubUpdater
     public function setAccessToken(string $accessToken): self
     {
         $this->gitHubAccessToken = $accessToken;
-
-        return $this;
-    }
-
-    /**
-     * Set tested WordPress version.
-     *
-     * @param string $version 6.5.2
-     * @return $this
-     */
-    public function setTestedWpVersion(string $version): self
-    {
-        $this->testedWpVersion = $version;
 
         return $this;
     }
