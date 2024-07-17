@@ -2,6 +2,54 @@
 
 WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to check for and update a custom plugin that's hosted in either a public or private repository on GitHub.
 
+## Plugin Header Fields
+
+The following [plugin header fields](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/) are being used by `GitHubUpdater`.
+
+### Version (Required)
+
+Specify your current plugin's version. For example:
+
+```
+Version: 1.0.0
+```
+
+Version is used to compare the installed plugin with the latest one on GitHub to determine if there are updates.
+
+### Plugin URI (Required)
+
+Specify URL to your plugin's changelog. For example:
+
+```
+Plugin URI: https://ryansechrest.github.io/github-updater-demo
+```
+
+Page will be embedded in a modal when viewing plugin details.
+
+### Update URI (Required)
+
+Specify URL to your plugin's repository on GitHub. For example:
+
+```
+Update URI: https://github.com/ryansechrest/github-updater-demo
+```
+
+Repository is used as the source for plugin updates.
+
+### Tested up to (Optional)
+
+Specify highest version of WordPress that your plugin was tested on. For example
+
+```
+Tested up to: 6.6
+```
+
+Will show the following compatibility message on Dashboard > Updates when your plugin has an update:
+
+```
+Compatibility with WordPress 6.6: 100% (according to its author)
+```
+
 ## Getting Started
 
 1. Copy `GitHubUpdater.php` into your plugin
@@ -72,22 +120,6 @@ $gitHubUpdater->add();
 ```
 
 This should be the last method call after `GitHubUpdater` has been configured.
-
-### Indicate WordPress Compatibility
-
-Add highest version of WordPress that your plugin was tested on using a custom `Tested up to` plugin header field.
-
-For example, specifying a header field like:
-
-```
-Tested up to: 6.6
-```
-
-Will show the following compatibility message on Dashboard > Updates when your plugin has an update:
-
-```
-Compatibility with WordPress 6.6: 100% (according to its author)
-```
 
 ## Final Thoughts
 
