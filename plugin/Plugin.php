@@ -21,7 +21,6 @@ class Plugin
     {
         (new GitHubUpdater($file))
             ->setBranch('master')
-            ->setTestedWpVersion('6.5.2')
             ->add();
     }
 }
