@@ -113,13 +113,13 @@ $gitHubUpdater->setBranch('master');
 
 ### Configure: Plugin Icon (Optional)
 
-If you want to use an image within your plugin as the plugin icon, set a relative path (starting from your plugin root) to the file:
+If you want to use an image within your plugin as the plugin icon, set a relative path to the file:
 
 ```php
 $gitHubUpdater->setPluginIcon('assets/icon.png');
 ```
 
-This icon appears on Dashboard > Updates next to your plugin when there's a pending update.
+The path should be relative from your plugin root. The icon appears on Dashboard > Updates next to your plugin.
 
 ### Add GitHubUpdater (Required)
 
