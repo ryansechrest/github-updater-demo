@@ -75,14 +75,6 @@ For example, `__FILE__` might resolve to:
 /var/www/domains/example.org/wp-content/plugins/<pluginDir>/<pluginSlug>.php
 ```
 
-### Configure: Production Branch (Optional)
-
-If your production branch is not the default `main`, then specify it:
-
-```php
-$gitHubUpdater->setBranch('master');
-```
-
 ### Configure: Personal Access Token (Optional)
 
 If your GitHub repository is private, then set your access token:
@@ -110,6 +102,24 @@ Or save your access token in `wp_options` and pass it via `get_option()`:
 ```php
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 ```
+
+### Configure: Production Branch (Optional)
+
+If your production branch is not the default `main`, then specify it:
+
+```php
+$gitHubUpdater->setBranch('master');
+```
+
+### Configure: Plugin Icon (Optional)
+
+If you want to use an image within your plugin as the plugin icon, set a relative path (starting from your plugin root) to the file:
+
+```php
+$gitHubUpdater->setPluginIcon('assets/icon.png');
+```
+
+This icon appears on Dashboard > Updates next to your plugin when there's a pending update.
 
 ### Add GitHubUpdater (Required)
 
