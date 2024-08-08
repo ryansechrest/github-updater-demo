@@ -8,7 +8,7 @@ namespace RYSE\GitHubUpdaterDemo;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.0.6
+ * @version 1.0.7
  */
 class GitHubUpdater
 {
@@ -107,6 +107,13 @@ class GitHubUpdater
      */
     private string $pluginVersion = '';
 
+    /**
+     * Relative path to plugin icon from plugin root.
+     *
+     * @var string assets/icon.png
+     */
+    private string $pluginIcon = '';
+
     /*------------------------------------------------------------------------*/
 
     /**
@@ -195,7 +202,7 @@ class GitHubUpdater
         );
 
         // e.g. `ryansechrest` and `github-updater-demo`
-        list($this->gitHubOrg, $this->gitHubRepo) = explode(
+        [$this->gitHubOrg, $this->gitHubRepo] = explode(
             '/', $this->gitHubPath
         );
 
@@ -205,7 +212,7 @@ class GitHubUpdater
         );
 
         // e.g. `github-updater-demo` and `github-updater-demo.php`
-        list($this->pluginDir, $this->pluginFilename) = explode(
+        [$this->pluginDir, $this->pluginFilename] = explode(
             '/', $this->pluginFile
         );
 
@@ -378,8 +385,9 @@ class GitHubUpdater
             'url' => $this->pluginUrl,
             'package' => $this->getRemotePluginZipFile(),
             'icons' => [
-                '2x' => $this->pluginUrl . '/icon-256x256.png',
-                '1x' => $this->pluginUrl . '/icon-128x128.png',
+                'default' => plugins_url(
+                    $this->pluginDir . '/' . $this->pluginIcon
+                ),
             ],
             'tested' => $this->testedUpTo,
         ];
@@ -623,6 +631,19 @@ class GitHubUpdater
     /**************************************************************************/
 
     /**
+     * Set GitHub access token.
+     *
+     * @param string $accessToken github_pat_fU7xGh...
+     * @return $this
+     */
+    public function setAccessToken(string $accessToken): self
+    {
+        $this->gitHubAccessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
      * Set GitHub branch of plugin.
      *
      * @param string $branch main
@@ -636,14 +657,14 @@ class GitHubUpdater
     }
 
     /**
-     * Set GitHub access token.
+     * Set relative path to plugin icon from plugin root.
      *
-     * @param string $accessToken github_pat_fU7xGh...
+     * @param string $file assets/icon.png
      * @return $this
      */
-    public function setAccessToken(string $accessToken): self
+    public function setPluginIcon(string $file): self
     {
-        $this->gitHubAccessToken = $accessToken;
+        $this->pluginIcon = ltrim($file, '/');
 
         return $this;
     }
