@@ -8,7 +8,7 @@ namespace RYSE\GitHubUpdaterDemo;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.0.7
+ * @version 1.0.8
  */
 class GitHubUpdater
 {
@@ -123,6 +123,15 @@ class GitHubUpdater
      */
     private string $testedUpTo = '';
 
+    /*------------------------------------------------------------------------*/
+
+    /**
+     * Enable GitHubUpdate debugger.
+     *
+     * @var bool
+     */
+    private bool $enableDebugger = false;
+
     /**************************************************************************/
 
     /**
@@ -135,6 +144,61 @@ class GitHubUpdater
         $this->file = $file;
 
         $this->load();
+    }
+
+    /**
+     * Set GitHub access token.
+     *
+     * @param string $accessToken github_pat_fU7xGh...
+     * @return $this
+     */
+    public function setAccessToken(string $accessToken): self
+    {
+        $this->gitHubAccessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Set GitHub branch of plugin.
+     *
+     * @param string $branch main
+     * @return $this
+     */
+    public function setBranch(string $branch): self
+    {
+        $this->gitHubBranch = $branch;
+
+        return $this;
+    }
+
+    /**
+     * Set relative path to plugin icon from plugin root.
+     *
+     * @param string $file assets/icon.png
+     * @return $this
+     */
+    public function setPluginIcon(string $file): self
+    {
+        $this->pluginIcon = ltrim($file, '/');
+
+        return $this;
+    }
+
+    /**
+     * Enable GitHubUpdater debugger.
+     *
+     * If this property is set to true, as well as the WP_DEBUG and WP_DEBUG_LOG
+     * constants within wp-config.php, then GitHubUpdater will log pertinent
+     * information to wp-content/debug.log.
+     *
+     * @return $this
+     */
+    public function enableDebugger(): self
+    {
+        $this->enableDebugger = true;
+
+        return $this;
     }
 
     /**
@@ -231,6 +295,68 @@ class GitHubUpdater
         $this->testedUpTo = $testedUpTo;
     }
 
+    /*------------------------------------------------------------------------*/
+
+    /**
+     * Log message with optional value.
+     *
+     * @param string $message Plugins data
+     * @return void
+     */
+    private function log(string $message,): void
+    {
+        if (!$this->enableDebugger || !WP_DEBUG || !WP_DEBUG_LOG) return;
+
+        error_log('[GitHubUpdater] ' . $message);
+    }
+
+    /**
+     * Log when method starts running.
+     *
+     * @param string $method _checkPluginUpdates
+     * @param string $hook update_plugins_github.com
+     * @return void
+     */
+    private function logStart(string $method, string $hook = ''): void
+    {
+        $message = $method . '() ';
+
+        if ($hook) $message = $hook . ' → ' . $message;
+
+        $this->log($message);
+        $this->log(str_repeat('-', 50));
+    }
+
+    /**
+     * Log label and value through print_r().
+     *
+     * @param string $label $pluginData
+     * @param mixed $value ['version' => '1.0.0', ...]
+     * @return void
+     */
+    private function logValue(string $label, mixed $value): void
+    {
+        if (!is_string($value)) {
+            $value = var_export($value, true);
+        }
+
+        $this->log($label . ': ' . $value);
+    }
+
+    /**
+     * Log when method finishes running.
+     *
+     * @param string $method _checkPluginUpdates
+     * @return void
+     */
+    private function logFinish(string $method): void
+    {
+        $this->log('/ ' . $method . '()');
+        $this->log('');
+    }
+
+    /*------------------------------------------------------------------------*/
+
     /**
      * Add admin notice that required plugin header fields are missing.
      *
@@ -313,10 +439,16 @@ class GitHubUpdater
         // If URL doesn't reference target plugin, exit
         if (!str_contains($path, $query)) return $url;
 
-        return sprintf(
+        $url = sprintf(
             '%s?TB_iframe=true&width=600&height=550',
             $this->pluginUrl
         );
+
+        $this->logStart('_updatePluginDetailsUrl', 'admin_url');
+        $this->logValue('Return', $url);
+        $this->logFinish('_updatePluginDetailsUrl');
+
+        return $url;
     }
 
     /*------------------------------------------------------------------------*/
@@ -360,6 +492,10 @@ class GitHubUpdater
         // If plugin does not match this plugin, exit
         if ($file !== $this->pluginFile) return $update;
 
+        $this->logStart(
+            '_checkPluginUpdates', 'update_plugins_github.com'
+        );
+
         // Get remote plugin file contents to read plugin header
         $fileContents = $this->getRemotePluginFileContents();
 
@@ -373,24 +509,52 @@ class GitHubUpdater
         // Save plugin version from remote plugin file, e.g. `1.1.0`
         $newVersion = $matches[1][0] ?? '';
 
-        // If version wasn't found, exit
-        if (!$newVersion) return $update;
+        $this->log('Does $newVersion (' . $newVersion . ') exist...');
 
-        // Build plugin response for WordPress
-        return [
+        // If version wasn't found, exit
+        if (!$newVersion) {
+            $this->log('No');
+            $this->logValue('Return early', $update);
+            $this->logFinish('_checkPluginUpdates');
+
+            return $update;
+        }
+
+        $this->log('Yes');
+
+        // Build plugin data response for WordPress
+        $pluginData = [
             'id' => $this->gitHubUrl,
             'slug' => $this->pluginSlug,
             'plugin' => $this->pluginFile,
             'version' => $newVersion,
             'url' => $this->pluginUrl,
             'package' => $this->getRemotePluginZipFile(),
-            'icons' => [
-                'default' => plugins_url(
-                    $this->pluginDir . '/' . $this->pluginIcon
-                ),
-            ],
             'tested' => $this->testedUpTo,
         ];
+
+        $pluginIcon = $this->getPluginIcon();
+
+        $this->log('Does $pluginIcon (' . $pluginIcon . ') exist...');
+
+        // If no icon was defined, exit with plugin data
+        if (!$pluginIcon) {
+            $this->log('No');
+            $this->logValue('Return early', $pluginData);
+            $this->logFinish('_checkPluginUpdates');
+
+            return $pluginData;
+        }
+
+        $this->log('Yes');
+
+        // Otherwise add icon to plugin data
+        $pluginData['icons'] = ['default' => $pluginIcon];
+
+        $this->logValue('Return', $pluginData);
+        $this->logFinish('_checkPluginUpdates');
+
+        return $pluginData;
     }
 
     /**
@@ -416,9 +580,7 @@ class GitHubUpdater
         // e.g. `https://raw.githubusercontent.com/ryansechrest/github-updater-demo/master/github-updater-demo.php`
         $remoteFile = $this->getPublicRemotePluginFile($this->pluginFilename);
 
-        return wp_remote_retrieve_body(
-            wp_remote_get($remoteFile)
-        );
+        return wp_remote_retrieve_body(wp_remote_get($remoteFile));
     }
 
     /**
@@ -558,6 +720,10 @@ class GitHubUpdater
         $args['headers']['Authorization'] = 'Bearer ' . $this->gitHubAccessToken;
         $args['headers']['Accept'] = 'application/vnd.github+json';
 
+        $this->logStart('_prepareHttpRequestArgs', 'http_request_args');
+        $this->logValue('Return', $args);
+        $this->logFinish('_prepareHttpRequestArgs');
+
         return $args;
     }
 
@@ -600,12 +766,28 @@ class GitHubUpdater
         // If plugin does not match this plugin, exit
         if ($pluginFile !== $this->pluginFile) return $result;
 
+        $this->logStart(
+            '_moveUpdatedPlugin', 'upgrader_install_package_result'
+        );
+
         // Save path to new plugin
         // e.g. `.../wp-content/plugins/github-updater-demo-master`
         $newPluginPath = $result['destination'] ?? '';
 
+        $this->log(
+            'Does $newPluginPath (' . $newPluginPath . ') exist...'
+        );
+
         // If path to new plugin doesn't exist, exit
-        if (!$newPluginPath) return $result;
+        if (!$newPluginPath) {
+            $this->log('No');
+            $this->logValue('Return early', $result);
+            $this->logFinish('_moveUpdatedPlugin');
+
+            return $result;
+        }
+
+        $this->log('Yes');
 
         // Save root path to all plugins, e.g. `.../wp-content/plugins`
         $pluginRootPath = $result['local_destination'] ?? WP_PLUGIN_DIR;
@@ -625,47 +807,25 @@ class GitHubUpdater
         $result['destination_name'] = $this->pluginDir;
         $result['remote_destination'] = $oldPluginPath;
 
+        $this->logValue('Return', $result);
+        $this->logFinish('_moveUpdatedPlugin');
+
         return $result;
     }
 
     /**************************************************************************/
 
     /**
-     * Set GitHub access token.
+     * Get plugin icon if defined and valid.
      *
-     * @param string $accessToken github_pat_fU7xGh...
-     * @return $this
+     * @return string https://example.org/wp-content/plugins/consent-manager/assets/icon.png
      */
-    public function setAccessToken(string $accessToken): self
+    private function getPluginIcon(): string
     {
-        $this->gitHubAccessToken = $accessToken;
+        if (!$this->pluginIcon) return '';
 
-        return $this;
-    }
+        $pluginIconPath = $this->pluginDir . '/' . $this->pluginIcon;
 
-    /**
-     * Set GitHub branch of plugin.
-     *
-     * @param string $branch main
-     * @return $this
-     */
-    public function setBranch(string $branch): self
-    {
-        $this->gitHubBranch = $branch;
-
-        return $this;
-    }
-
-    /**
-     * Set relative path to plugin icon from plugin root.
-     *
-     * @param string $file assets/icon.png
-     * @return $this
-     */
-    public function setPluginIcon(string $file): self
-    {
-        $this->pluginIcon = ltrim($file, '/');
-
-        return $this;
+        return plugins_url($pluginIconPath);
     }
 }
