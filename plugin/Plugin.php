@@ -21,6 +21,10 @@ class Plugin
     {
         (new GitHubUpdater($file))
             ->setBranch('master')
+            ->setPluginIcon('assets/icon.png')
+            ->setPluginBannerSmall('assets/banner-772x250.jpg')
+            ->setPluginBannerLarge('assets/banner-1544x500.jpg')
+            ->setChangelog('CHANGELOG.md')
             ->add();
     }
 }
