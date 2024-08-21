@@ -16,16 +16,6 @@ Version: 1.0.0
 
 Version is used to compare the installed plugin with the latest one on GitHub to determine if there are updates.
 
-### Plugin URI (Required)
-
-Specify URL to your plugin's changelog. For example:
-
-```
-Plugin URI: https://ryansechrest.github.io/github-updater-demo
-```
-
-Page will be embedded in a modal when viewing plugin details.
-
 ### Update URI (Required)
 
 Specify URL to your plugin's repository on GitHub. For example:
@@ -113,13 +103,59 @@ $gitHubUpdater->setBranch('master');
 
 ### Configure: Plugin Icon (Optional)
 
-If you want to use an image within your plugin as the plugin icon, set a relative path to the file:
+Specify a relative path from the plugin root to configure a plugin icon:
 
 ```php
 $gitHubUpdater->setPluginIcon('assets/icon.png');
 ```
 
-The path should be relative from your plugin root. The icon appears on Dashboard > Updates next to your plugin.
+The icon appears on Dashboard > Updates next to your plugin.
+
+### Configure: Small Plugin Banner (Optional)
+
+Specify a relative path from the plugin root to configure a small plugin banner:
+
+```php
+$gitHubUpdater->setPluginBannerSmall('assets/banner-772x250.jpg');
+```
+
+The banner will appear in the modal when clicking [View details] on your plugin.
+
+### Configure: Large Plugin Banner (Optional)
+
+Specify a relative path from the plugin root to configure a large plugin banner:
+
+```php
+$gitHubUpdater->setPluginBannerLarge('assets/banner-1544x500.jpg');
+```
+
+The banner will appear in the modal when clicking [View details] on your plugin.
+
+### Configure: Changelog (Optional)
+
+Specify a relative path from the plugin root to your changelog:
+
+```php
+$gitHubUpdater->setChangelog('CHANGELOG.md');
+```
+
+This should be a Markdown file and will populate the Changelog tab when clicking
+[View details] on your plugin. `GitHubUpdater` will use the most recent file from
+GitHub so that a user can review changes before updating.
+
+The Markdown to HTML converter currently only supports:
+
+- Headers (`#`, `##`, `###`, etc.)
+- Unordered lists (`-`)
+- Blockquotes (`>`)
+- Code blocks (using three backticks to start and end block)
+- Paragraphs
+
+And only formats:
+
+- Bold text (`**Foo**`)
+- Italic text (`*Foo*`)
+- Code (using single backtick to wrap text)
 
 ### Add GitHubUpdater (Required)
 
@@ -133,4 +169,7 @@ This should be the last method call after `GitHubUpdater` has been configured.
 
 ## Final Thoughts
 
-If you want a deep dive into how `GitHubUpdater` works, check out this [blog post](https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/).
+If you want a deep dive into how `GitHubUpdater` works, check out this 
+[blog post](https://ryansechrest.com/2024/04/how-to-enable-wordpress-to-update-your-custom-plugin-hosted-on-github/).
+That said, while the fundamentals in the blog post are still being used,
+`GitHubUpdater` has changed quite a bit since it was written.
