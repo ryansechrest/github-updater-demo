@@ -913,7 +913,7 @@ class GitHubUpdater
     /**
      * Get plugin icon if defined and valid.
      *
-     * @return string https://example.org/wp-content/plugins/consent-manager/assets/icon.png
+     * @return string https://example.org/wp-content/plugins/github-updater-demo/assets/icon.png
      */
     private function getPluginIcon(): string
     {
@@ -927,7 +927,7 @@ class GitHubUpdater
     /**
      * Get small plugin banner (772x250).
      *
-     * @return string https://example.org/wp-content/plugins/consent-manager/assets/banner-772x250.jpg
+     * @return string https://example.org/wp-content/plugins/github-updater-demo/assets/banner-772x250.jpg
      */
     private function getPluginBannerSmall(): string
     {
@@ -939,7 +939,7 @@ class GitHubUpdater
     /**
      * Get large plugin banner (1544x500).
      *
-     * @return string https://example.org/wp-content/plugins/consent-manager/assets/banner-1544x500.jpg
+     * @return string https://example.org/wp-content/plugins/github-updater-demo/assets/banner-1544x500.jpg
      */
     private function getPluginBannerLarge(): string
     {
@@ -952,7 +952,7 @@ class GitHubUpdater
      * Get plugin file if exists.
      *
      * @param string $file assets/icon.png
-     * @return string https://example.org/wp-content/plugins/consent-manager/assets/icon.png
+     * @return string https://example.org/wp-content/plugins/github-updater-demo/assets/icon.png
      */
     private function getPluginFile(string $file): string
     {
