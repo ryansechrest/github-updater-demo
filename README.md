@@ -6,19 +6,45 @@ WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to chec
 
 The following [plugin header fields](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/) are being used by `GitHubUpdater`.
 
+### Plugin Name (Required)
+
+Set the name of your plugin:
+
+```
+Plugin Name: GitHub Updater Demo
+```
+
+Name is displayed on the **Plugins > Installed Plugins** page, on the
+**Dashboard > Updates** page, and within the plugin details modal when clicking
+**View details**.
+
+### Plugin URI (Optional)
+
+Set the URL of your plugin's website:
+
+```
+Plugin URI: https://github.com/ryansechrest/github-updater-demo
+```
+
+URL is displayed on the within the plugin details modal when clicking
+**View details** as **Plugin Homepage**.
+
 ### Version (Required)
 
-Specify your current plugin's version. For example:
+Set the current version of your plugin:
 
 ```
 Version: 1.0.0
 ```
 
-Version is used to compare the installed plugin with the latest one on GitHub to determine if there are updates.
+Version is used to compare the installed plugin with the latest one on GitHub to
+determine if there are updates. Version is displayed on
+**Plugins > Installed Plugins** page, on the **Dashboard > Updates** page, and
+within the plugin details modal when clicking **View details**. 
 
 ### Update URI (Required)
 
-Specify URL to your plugin's repository on GitHub. For example:
+Set the URL to your plugin's GitHub repository:
 
 ```
 Update URI: https://github.com/ryansechrest/github-updater-demo
@@ -26,19 +52,64 @@ Update URI: https://github.com/ryansechrest/github-updater-demo
 
 Repository is used as the source for plugin updates.
 
+### Author (Optional)
+
+Set the name of your plugin's author:
+
+```
+Author: Ryan Sechrest
+```
+
+Name is displayed on the **Plugins > Installed Plugins** page, on the
+**Dashboard > Updates** page, and within the plugin details modal when clicking
+**View details**.
+
+### Author URI (Optional)
+
+Set the URL of your plugin author's website:
+
+```
+Author URI: https://ryansechrest.com
+```
+
+Will hyperlink author's name from up above.
+
 ### Tested up to (Optional)
 
-Specify highest version of WordPress that your plugin was tested on. For example
+Set the highest version of WordPress that your plugin was tested on:
 
 ```
-Tested up to: 6.6
+Tested up to: 6.6.1
 ```
 
-Will show the following compatibility message on Dashboard > Updates when your plugin has an update:
+Will display the following compatibility message on **Dashboard > Updates** when
+your plugin has an update:
 
 ```
-Compatibility with WordPress 6.6: 100% (according to its author)
+Compatibility with WordPress 6.6.1: 100% (according to its author)
 ```
+
+### Requires at least (Optional)
+
+Set the lowest version of WordPress that your plugin works on:
+
+```
+Requires at least: 6.5
+```
+
+Version is displayed within the plugin details modal when clicking
+**View details**.
+
+### Requires PHP (Optional)
+
+Set the lowest version of PHP that your plugin works on:
+
+```
+Requires PHP: 8.2
+```
+
+Version is displayed within the plugin details modal when clicking
+**View details**.
 
 ## Getting Started
 
@@ -109,7 +180,7 @@ Specify a relative path from the plugin root to configure a plugin icon:
 $gitHubUpdater->setPluginIcon('assets/icon.png');
 ```
 
-The icon appears on Dashboard > Updates next to your plugin.
+The icon appears on **Dashboard > Updates** next to your plugin.
 
 ### Configure: Small Plugin Banner (Optional)
 
@@ -119,7 +190,8 @@ Specify a relative path from the plugin root to configure a small plugin banner:
 $gitHubUpdater->setPluginBannerSmall('assets/banner-772x250.jpg');
 ```
 
-The banner will appear in the modal when clicking [View details] on your plugin.
+The banner will appear in the modal when clicking **View details** on your
+plugin.
 
 ### Configure: Large Plugin Banner (Optional)
 
@@ -129,7 +201,8 @@ Specify a relative path from the plugin root to configure a large plugin banner:
 $gitHubUpdater->setPluginBannerLarge('assets/banner-1544x500.jpg');
 ```
 
-The banner will appear in the modal when clicking [View details] on your plugin.
+The banner will appear in the modal when clicking **View details** on your
+plugin.
 
 ### Configure: Changelog (Optional)
 
@@ -140,8 +213,8 @@ $gitHubUpdater->setChangelog('CHANGELOG.md');
 ```
 
 This should be a Markdown file and will populate the Changelog tab when clicking
-[View details] on your plugin. `GitHubUpdater` will use the most recent file from
-GitHub so that a user can review changes before updating.
+**View details** on your plugin. `GitHubUpdater` will use the most recent file
+from  GitHub so that a user can review changes before updating.
 
 The Markdown to HTML converter currently only supports:
 
