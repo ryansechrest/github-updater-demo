@@ -1007,7 +1007,7 @@ class GitHubUpdater
             );
         });
 
-        if (!$this->accessTokenExpiresInDays(30)) {
+        if (!$this->accessTokenExpiresInDays(7)) {
             return;
         }
 
