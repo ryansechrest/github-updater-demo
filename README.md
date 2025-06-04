@@ -6,7 +6,7 @@ WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to chec
 
 The following [plugin header fields](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/) are being used by `GitHubUpdater`.
 
-### Plugin Name (Required)
+### 🔴 Plugin Name (Required)
 
 Set the name of your plugin:
 
@@ -18,7 +18,7 @@ Name is displayed on the **Plugins > Installed Plugins** page, on the
 **Dashboard > Updates** page, and within the plugin details modal when clicking
 **View details**.
 
-### Plugin URI (Optional)
+### 🔵 Plugin URI (Optional)
 
 Set the URL of your plugin's website:
 
@@ -29,7 +29,7 @@ Plugin URI: https://github.com/ryansechrest/github-updater-demo
 URL is displayed on the within the plugin details modal when clicking
 **View details** as **Plugin Homepage**.
 
-### Version (Required)
+### 🔴 Version (Required)
 
 Set the current version of your plugin:
 
@@ -42,7 +42,7 @@ determine if there are updates. Version is displayed on
 **Plugins > Installed Plugins** page, on the **Dashboard > Updates** page, and
 within the plugin details modal when clicking **View details**. 
 
-### Update URI (Required)
+### 🔴 Update URI (Required)
 
 Set the URL to your plugin's GitHub repository:
 
@@ -52,7 +52,7 @@ Update URI: https://github.com/ryansechrest/github-updater-demo
 
 Repository is used as the source for plugin updates.
 
-### Author (Optional)
+### 🔵 Author (Optional)
 
 Set the name of your plugin's author:
 
@@ -64,7 +64,7 @@ Name is displayed on the **Plugins > Installed Plugins** page, on the
 **Dashboard > Updates** page, and within the plugin details modal when clicking
 **View details**.
 
-### Author URI (Optional)
+### 🔵 Author URI (Optional)
 
 Set the URL of your plugin author's website:
 
@@ -74,7 +74,7 @@ Author URI: https://ryansechrest.com
 
 Will hyperlink author's name from up above.
 
-### Tested up to (Optional)
+### 🔵 Tested up to (Optional)
 
 Set the highest version of WordPress that your plugin was tested on:
 
@@ -89,7 +89,7 @@ your plugin has an update:
 Compatibility with WordPress 6.6.1: 100% (according to its author)
 ```
 
-### Requires at least (Optional)
+### 🔵 Requires at least (Optional)
 
 Set the lowest version of WordPress that your plugin works on:
 
@@ -100,7 +100,7 @@ Requires at least: 6.5
 Version is displayed within the plugin details modal when clicking
 **View details**.
 
-### Requires PHP (Optional)
+### 🔵 Requires PHP (Optional)
 
 Set the lowest version of PHP that your plugin works on:
 
@@ -122,7 +122,7 @@ Version is displayed within the plugin details modal when clicking
 
 How to add and configure `GitHubUpdater` for your plugin.
 
-### Instantiate GitHubUpdater (Required)
+### 🔴 Instantiate GitHubUpdater (Required)
 
 Instantiate `GitHubUpdater` and pass in the absolute path to your root plugin file.
 
@@ -136,7 +136,7 @@ For example, `__FILE__` might resolve to:
 /var/www/domains/example.org/wp-content/plugins/<pluginDir>/<pluginSlug>.php
 ```
 
-### Configure: Personal Access Token (Optional)
+### 🔵 Configure: Personal Access Token (Optional)
 
 If your GitHub repository is private, then set your access token:
 
@@ -164,7 +164,7 @@ Or save your access token in `wp_options` and pass it via `get_option()`:
 $gitHubUpdater->setAccessToken(get_option('github_access_token'));
 ```
 
-### Configure: Production Branch (Optional)
+### 🔵 Configure: Production Branch (Optional)
 
 If your production branch is not the default `main`, then specify it:
 
@@ -172,7 +172,7 @@ If your production branch is not the default `main`, then specify it:
 $gitHubUpdater->setBranch('master');
 ```
 
-### Configure: Plugin Icon (Optional)
+### 🔵 Configure: Plugin Icon (Optional)
 
 Specify a relative path from the plugin root to configure a plugin icon:
 
@@ -182,7 +182,7 @@ $gitHubUpdater->setPluginIcon('assets/icon.png');
 
 The icon appears on **Dashboard > Updates** next to your plugin.
 
-### Configure: Small Plugin Banner (Optional)
+### 🔵 Configure: Small Plugin Banner (Optional)
 
 Specify a relative path from the plugin root to configure a small plugin banner:
 
@@ -193,7 +193,7 @@ $gitHubUpdater->setPluginBannerSmall('assets/banner-772x250.jpg');
 The banner will appear in the modal when clicking **View details** on your
 plugin.
 
-### Configure: Large Plugin Banner (Optional)
+### 🔵 Configure: Large Plugin Banner (Optional)
 
 Specify a relative path from the plugin root to configure a large plugin banner:
 
@@ -204,7 +204,7 @@ $gitHubUpdater->setPluginBannerLarge('assets/banner-1544x500.jpg');
 The banner will appear in the modal when clicking **View details** on your
 plugin.
 
-### Configure: Changelog (Optional)
+### 🔵 Configure: Changelog (Optional)
 
 Specify a relative path from the plugin root to your changelog:
 
@@ -230,7 +230,33 @@ And only formats:
 - Italic text (`*Foo*`)
 - Code (using single backtick to wrap text)
 
-### Add GitHubUpdater (Required)
+### 🔵 Enable: Access Token Setting
+
+Enable this setting to add a section called **GitHub Access Tokens** to the bottom of WordPress' **General Settings** page. Within this section, there will be a field to store the access token for the plugin.
+
+```php
+$gitHubUpdater->enableSetting();
+```
+
+When an access token is entered, GitHub Updater will ensure it's valid before saving it, keeping any previous access token as a precaution.
+
+Once an access token is validated and saved, GitHub Updater will display the last five characters of the token, the GitHub account name that created it, and the expiration date below the field.
+
+Should the access token expire in seven days or less, an admin notice will display on all admin pages in WordPress to let users know that a new token must be generated.
+
+Should both `enableSetting()` and `setAccessToken()` be called, the access token passed into `setAccessToken()` will take precedence, so remove `setAccessToken()` to use the settings field.
+
+Last, if the plugin is called **GitHub Updater Demo**, the following three options will be created in the database (`wp_options`) based on the plugin name:
+
+| Option Name                                   | Sample Value | Description                                          |
+|-----------------------------------------------|--------------|------------------------------------------------------|
+| `github_updater_demo_access_token`            | `github_pat_*****` | Actual GitHub access token                           |
+| `github_updater_demo_access_token_account`    | `ryansechrest` | GitHub username of person who generated access token |
+| `github_updater_demo_access_token_expiration` | `0000-00-00 00:00:00` | Date and time of when GitHub access token expires    |
+
+This model will allow multiple plugins to use GitHub Updater and keep all access tokens managed in one place.
+
+### 🔴 Add GitHubUpdater (Required)
 
 Add all necessary hooks to WordPress to keep your plugin updated moving forward:
 
