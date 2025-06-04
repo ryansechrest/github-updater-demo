@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.2.0
+
+- Add ability to configure GitHub access token on General Settings page.
+
 ### v1.1.0
 
 - Implement standardized WordPress plugin details modal.
