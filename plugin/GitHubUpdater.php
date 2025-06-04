@@ -482,6 +482,23 @@ class GitHubUpdater
         // If the remote plugin file could not be retrieved, exit
         if (!$fileContents) return $result;
 
+        // Check if there is an access token
+        $accessToken = $this->getAccessToken();
+
+        // If an access token exists and JSON could be decoded,
+        // build a result that explains the error that occurred
+        if ($accessToken && ($json = json_decode($fileContents)) !== null) {
+            return (object) [
+                'name' => $this->pluginName,
+                'slug' => $this->pluginSlug,
+                'version' => $this->pluginVersion,
+                'homepage' => $this->pluginUrl,
+                'sections' => [
+                    'description' => '<p>GitHub repository for the plugin could not be accessed.</p><ul><li>Status: ' . $json->status . '</li><li>Message: ' . $json->message . '</li><li>Documentation: <a href="' . $json->documentation_url . '">' . $json->documentation_url . '</a></li></ul>'
+                ],
+            ];
+        }
+
         // Extract the plugin version from the remote plugin file contents
         $fields = $this->extractPluginHeaderFields(
             [
