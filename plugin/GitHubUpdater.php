@@ -1324,8 +1324,15 @@ class GitHubUpdater
      */
     private function accessTokenExpiresInDays(int $days): bool
     {
+        $tokenExpiration = $this->getAccessTokenExpiration();
+
+        // If the access token expiration date does not exist
+        if ($tokenExpiration === '0000-00-00 00:00:00') {
+            return false;
+        }
+
         $currentDateTime = new DateTime();
-        $tokenDateTime = new DateTime($this->getAccessTokenExpiration());
+        $tokenDateTime = new DateTime($tokenExpiration);
 
         // If the access token is already expired
         if ($tokenDateTime <= $currentDateTime) {
