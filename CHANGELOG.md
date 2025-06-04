@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.2.1
+
+- Prevent showing admin notice if no access token expiration date exists.
+
 ### v1.2.0
 
 - Add ability to configure GitHub access token on General Settings page.
