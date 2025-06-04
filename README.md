@@ -238,9 +238,9 @@ Enable this setting to add a section called **GitHub Access Tokens** to the bott
 $gitHubUpdater->enableSetting();
 ```
 
-When an access token is entered, GitHub Updater will ensure it's valid before saving it, keeping any previous access token as a precaution.
+When an access token is entered, `GitHubUpdater` will ensure it's valid before saving it, keeping any previous access token as a precaution.
 
-Once an access token is validated and saved, GitHub Updater will display the last five characters of the token, the GitHub account name that created it, and the expiration date below the field.
+Once an access token is validated and saved, `GitHubUpdater` will display the last five characters of the token, the GitHub account name that created it, and the expiration date below the field.
 
 Should the access token expire in seven days or less, an admin notice will display on all admin pages in WordPress to let users know that a new token must be generated.
 
@@ -254,7 +254,7 @@ Last, if the plugin is called **GitHub Updater Demo**, the following three optio
 | `github_updater_demo_access_token_account`    | `ryansechrest` | GitHub username of person who generated access token |
 | `github_updater_demo_access_token_expiration` | `0000-00-00 00:00:00` | Date and time of when GitHub access token expires    |
 
-This model will allow multiple plugins to use GitHub Updater and keep all access tokens managed in one place.
+This model will allow multiple plugins to use `GitHubUpdater` and keep all access tokens managed in one place.
 
 ### 🔴 Add GitHubUpdater (Required)
 
