@@ -10,7 +10,7 @@ namespace RYSE\GitHubUpdaterDemo;
  * Author:             Ryan Sechrest
  * Author URI:         https://ryansechrest.com/
  * Text Domain:        ryse-github-updater-demo
- * Tested up to:       6.8.1
+ * Tested up to:       6.8.3
  * Requires at least:  6.5
  * Requires PHP:       8.2
  * Update URI:         https://github.com/ryansechrest/github-updater-demo
