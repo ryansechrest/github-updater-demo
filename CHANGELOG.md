@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.2.2
+
+- Include `WP_Error` as possible `$result` in `_moveUpdatedPlugin()`.
+
 ### v1.2.1
 
 - Prevent showing admin notice if no access token expiration date exists.
