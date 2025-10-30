@@ -3,6 +3,7 @@
 namespace RYSE\GitHubUpdaterDemo;
 
 use DateTime;
+use WP_Error;
 
 /**
  * Enable WordPress to check for and update a custom plugin that's hosted in
@@ -10,7 +11,7 @@ use DateTime;
  *
  * @author Ryan Sechrest
  * @package RYSE\GitHubUpdaterDemo
- * @version 1.2.1
+ * @version 1.2.2
  */
 class GitHubUpdater
 {
@@ -919,12 +920,15 @@ class GitHubUpdater
     /**
      * Hook to move the updated plugin.
      *
-     * @param array $result ['destination' => '.../wp-content/plugins/github-updater-demo-main', ...]
+     * @param array|WP_Error $result ['destination' => '.../wp-content/plugins/github-updater-demo-main', ...]
      * @param array $options ['plugin' => 'github-updater-demo/github-updater-demo.php', ...]
-     * @return array
+     * @return array|WP_Error
      */
-    public function _moveUpdatedPlugin(array $result, array $options): array
+    public function _moveUpdatedPlugin(array|WP_Error $result, array $options): array
     {
+        // If the plugin was not successfully installed, exit
+        if (is_wp_error($result)) return $result;
+
         // Get the plugin being updated
         // e.g. `github-updater-demo/github-updater-demo.php`
         $pluginFile = $options['plugin'] ?? '';
