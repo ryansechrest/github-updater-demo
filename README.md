@@ -1,14 +1,14 @@
 # GitHub Updater Demo
 
-WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to check for and update a custom plugin that's hosted in either a public or private repository on GitHub.
+WordPress plugin to demonstrate how `GitHubUpdater` can enable WordPress to check for and update a custom plugin that's hosted in either a public or private GitHub repository.
 
 ## Plugin Header Fields
 
-The following [plugin header fields](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/) are being used by `GitHubUpdater`.
+The following [plugin header fields](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/) are used by `GitHubUpdater`.
 
 ### 🔴 Plugin Name (Required)
 
-Set the name of your plugin:
+Set the plugin's name:
 
 ```
 Plugin Name: GitHub Updater Demo
@@ -20,31 +20,31 @@ Name is displayed on the **Plugins > Installed Plugins** page, on the
 
 ### 🔵 Plugin URI (Optional)
 
-Set the URL of your plugin's website:
+Set the plugin's website:
 
 ```
 Plugin URI: https://github.com/ryansechrest/github-updater-demo
 ```
 
-URL is displayed on the within the plugin details modal when clicking
-**View details** as **Plugin Homepage**.
+URL is used within the plugin details modal when clicking
+**View details** and then **Plugin Homepage**.
 
 ### 🔴 Version (Required)
 
-Set the current version of your plugin:
+Set the plugin's version:
 
 ```
 Version: 1.0.0
 ```
 
 Version is used to compare the installed plugin with the latest one on GitHub to
-determine if there are updates. Version is displayed on
+determine if there are updates. Version is displayed on the
 **Plugins > Installed Plugins** page, on the **Dashboard > Updates** page, and
 within the plugin details modal when clicking **View details**. 
 
 ### 🔴 Update URI (Required)
 
-Set the URL to your plugin's GitHub repository:
+Set the plugin's GitHub repository:
 
 ```
 Update URI: https://github.com/ryansechrest/github-updater-demo
@@ -54,7 +54,7 @@ Repository is used as the source for plugin updates.
 
 ### 🔵 Author (Optional)
 
-Set the name of your plugin's author:
+Set the plugin author's name:
 
 ```
 Author: Ryan Sechrest
@@ -66,17 +66,17 @@ Name is displayed on the **Plugins > Installed Plugins** page, on the
 
 ### 🔵 Author URI (Optional)
 
-Set the URL of your plugin author's website:
+Set the plugin author's website:
 
 ```
 Author URI: https://ryansechrest.com
 ```
 
-Will hyperlink author's name from up above.
+Will hyperlink author's name to the URL above.
 
 ### 🔵 Tested up to (Optional)
 
-Set the highest version of WordPress that your plugin was tested on:
+Set the highest version of WordPress that the plugin was tested on:
 
 ```
 Tested up to: 6.6.1
@@ -230,7 +230,7 @@ And only formats:
 - Italic text (`*Foo*`)
 - Code (using single backtick to wrap text)
 
-### 🔵 Enable: Access Token Setting
+### 🔵 Enable: Access Token Setting (Optional)
 
 Enable this setting to add a section called **GitHub Access Tokens** to the bottom of WordPress' **General Settings** page. Within this section, there will be a field to store the access token for the plugin.
 
